@@ -30,17 +30,13 @@ def gui(adw,adaw):
                         self.__pointer = i[0]
                         if type(i[2]) == bytes:
                             Write_Bytes(self.__pointer, i[2], len(i[2]))
-                        elif type(i[2]) == str:
-                            Write_Bytes(self.__pointer, asm_to_bytes(i[2]), len(asm_to_bytes(i[2])))
                 else:
                     self.__toggle = False
                     for i in hack:
                         self.__pointer = i[0]
                         if type(i[2]) == bytes:
                             Write_Bytes(self.__pointer, i[1], len(i[1]))
-                        elif type(i[2]) == str:
-                            Write_Bytes(self.__pointer, asm_to_bytes(i[1]), len(asm_to_bytes(i[1])))
-
+                    
             self.c = tk.Checkbutton(window, command=switch, text=name)
             self.c.grid()
         
@@ -49,27 +45,6 @@ def gui(adw,adaw):
             OPTIONS += [name]
             varlist += [[name, address, offsets, datatype]]
 
-        def new_hook(self, name, address, asm, origbytes):
-            self.__toggle = False
-            def switch():
-                if not self.__toggle:
-                    self.__toggle = True
-                    if type(asm) == str:
-                        bytess = asm_to_bytes(asm)
-                        jmpLoc = process.allocate(len(bytess))
-                        Write_Bytes(address, asm_to_bytes(f"jmp {jmpLoc}"), len(asm_to_bytes(f"jmp {jmpLoc}")))
-                        Write_Bytes(jmpLoc, bytess, len(bytess))
-                    elif type(asm) == bytes:
-                        jmpLoc = process.allocate(0x1000)
-                        print(jmpLoc, f"jmp {hex(jmpLoc)}", asm_to_bytes(f"jmp {hex(jmpLoc)}"))
-                        Write_Bytes(address, asm_to_bytes(f"jmp {hex(jmpLoc)}"), len(asm_to_bytes(f"jmp {hex(jmpLoc)}")))
-                        Write_Bytes(jmpLoc, asm, len(asm))
-                elif self.__toggle:
-                    self.__toggle = False
-                    Write_Bytes(address, origbytes, len(origbytes))
-
-            self.c = tk.Checkbutton(window, command=switch, text=name)
-            self.c.grid()
     set_hacks()
 
     def close_window():
@@ -113,7 +88,7 @@ def gui(adw,adaw):
     24
 
 def magic_mirror():
-    ptr = Find_Pointer(base_address, 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x6ba])
+    ptr = Find_Pointer(base_address, 0x00411C54, [0x0, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x6ba])
     Write_Int(ptr, 1)
 
 HurtSym = ScanForFunction(pid,"55 8B EC 57 56 53 81 EC 6C 02 00 00 8B F1 8D BD B0 FD FF FF")
@@ -125,13 +100,14 @@ resethbox = ScanForFunction(pid, "56 50 8B F1 8D 46 2C DB 46 1C D9 1C 24 D9 04 2
 wingmove = ScanForFunction(pid, "55 8B EC 83 EC 08 8B 91 B8 02 00 00 83 FA 04 0F 85 11 01 00")
 inf = ScanForFunction(pid, "55 8B EC 57 56 53 83 EC 4C 8B F1 8D 7D AC B9 11 00 00 00 33 C0 F3 AB 8B CE 89 55 A8 8B D9")
 creativ = ScanForFunction(pid, "55 8B EC 57 56 83 EC 10 33 C0 89 45 F0 89 45 F4 8B F1 8B FA 80 7E 21 00")
+
 def set_hacks():
     global window, ghost, creative, eblockplat, instresp
     #new hack layout          name            addr    off             toggled
     #new_hack().new_hack("Toggle NoClip", [[0xF04A0, b'\x55\x8B\xEC', b'\xC2\x04\x00']])
-    new_hack().new_hack("Toggle Dupe When Ctrl+Click", [[IntoAir, "xor edx,edx", "ret"]])
+    new_hack().new_hack("Toggle Dupe When Ctrl+Click", [[IntoAir, b'\x33\xd2', b'\xc3\x90']])
     new_hack().new_hack("Toggle Dupe When Right Click", [[IntoMouse+0xd4, b'\xFF\x8A', b'\xFF\x82']])
-    new_hack().new_hack("Toggle Invincibility", [[HurtSym+0x1199, "sub [edx+0x00003E4],eax", "add [edx+0x00003E4],eax"]])
+    new_hack().new_hack("Toggle Invincibility", [[HurtSym+0x1199, b')\x82\xe4\x03\x00\x00', b'\x01\x82\xe4\x03\x00\x00']])
     new_hack().new_hack("Toggle No Knockback", [[ResetEffect+0x140, b"\x88\x96\x03\x07\x00\x00\x88\x96\xFF\x07\x00\x00", b"\xC7\x86\x03\x07\x00\x00\x01\x00\x00\x00\x90\x90"]])
     new_hack().new_hack("Toggle Infinte Minions", [[ResetEffect+0x322, b"\xC7\x86\x98\x02\x00\x00\x01\x00\x00", b"\xC7\x86\x98\x02\x00\x00\x99\x99\x09"]])
     new_hack().new_hack("Toggle Walk Through Walls", [[resethbox+0x1c, b"\x83\xC0\x2A", b"\x83\xC0\x00"]])
@@ -157,10 +133,10 @@ def set_hacks():
 
     
     # new varlayout         name      address         offsets                            datatype
-    new_hack().new_var("Health", 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x3e4], "Int")
-    new_hack().new_var("Max Health", 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x3DC], "Int")
-    new_hack().new_var("Mana", 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x3e8], "Int")
-    new_hack().new_var("Max Mana", 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x3eC], "Int")
+    new_hack().new_var("Health", 0x00411C54, [0x0, 0x3e4], "Int")
+    new_hack().new_var("Max Health", 0x00411C54, [0x0, 0x3DC], "Int")
+    new_hack().new_var("Mana", 0x00411C54, [0x0, 0x3e8], "Int")
+    new_hack().new_var("Max Mana", 0x00411C54, [0x0, 0x3eC], "Int")
 
 '''
 player 6ba magic mirrior command (make button style hack)
@@ -189,14 +165,14 @@ while running:
         label.config(text=f"Current {thingyvar}: {val}", font=("calibri", 7))
 
         if ghost.get() == 1:
-            pointer = Find_Pointer(base_address, 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x698])
+            pointer = Find_Pointer(base_address, 0x00411C54, [0x0, 0x698])
             Write_Int(pointer, 1)
         else:
-            pointer = Find_Pointer(base_address, 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x698])
+            pointer = Find_Pointer(base_address, 0x00411C54, [0x0, 0x698])
             Write_Int(pointer, 0)
 
         if instresp.get() == 1:
-            pointer = Find_Pointer(base_address, 0x00996898, [0x18, 0x14, 0x38, 0x24, 0x10C, 0x64, 0x380])
+            pointer = Find_Pointer(base_address, 0x00411C54, [0x0, 0x380])
             Write_Int(pointer, 0)
 
         '''

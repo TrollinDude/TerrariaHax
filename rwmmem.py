@@ -7,14 +7,6 @@ from ctypes import byref, sizeof, c_uint, windll
 from ReadWriteMemory import ReadWriteMemory
 from pymem import Pymem
 import pymem
-import keystone
-x86 = keystone.Ks(keystone.KS_ARCH_X86, keystone.KS_MODE_32)
-
-def asm_to_bytes(asm):
-    final = b''
-    for i in x86.asm(asm)[0]:
-        final += i.to_bytes(1, 'little')
-    return final
 
 def Get_Process(process_name):
     global processt
