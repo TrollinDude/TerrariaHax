@@ -109,9 +109,9 @@ def set_hacks():
     new_hack().new_hack("Toggle Dupe When Right Click", [[IntoMouse+0xd4, b'\xFF\x8A', b'\xFF\x82']])
     new_hack().new_hack("Toggle Invincibility", [[HurtSym+0x1199, b')\x82\xe4\x03\x00\x00', b'\x01\x82\xe4\x03\x00\x00']])
     new_hack().new_hack("Toggle No Knockback", [[ResetEffect+0x140, b"\x88\x96\x03\x07\x00\x00\x88\x96\xFF\x07\x00\x00", b"\xC7\x86\x03\x07\x00\x00\x01\x00\x00\x00\x90\x90"]])
-    new_hack().new_hack("Toggle Infinte Minions", [[ResetEffect+0x322, b"\xC7\x86\x98\x02\x00\x00\x01\x00\x00", b"\xC7\x86\x98\x02\x00\x00\x99\x99\x09"]])
+    new_hack().new_hack("Toggle Infinite Minions", [[ResetEffect+0x322, b"\xC7\x86\x98\x02\x00\x00\x01\x00\x00", b"\xC7\x86\x98\x02\x00\x00\x99\x99\x09"]])
     new_hack().new_hack("Toggle Walk Through Walls", [[resethbox+0x1c, b"\x83\xC0\x2A", b"\x83\xC0\x00"]])
-    new_hack().new_hack("Toggle Infinte Wings", [[wingmove+0x6c1, b"\xD9\x99\xB0\x02\x00\x00", b"\x90\x90\x90\x90\x90\x90"]])
+    new_hack().new_hack("Toggle Infinite Wings", [[wingmove+0x6c1, b"\xD9\x99\xB0\x02\x00\x00", b"\x90\x90\x90\x90\x90\x90"]])
     
     #new_hack().new_hook("Toggle Full Bright (wip)", FullBrightHook+0xFC, 
     #b"\x56\x8B\x75\x08\xC7\x06\x00\x00\x80\x3F\xC7\x46\x04\x00\x00\x80\x3F\xC7\x46\x08\x00\x00\x80\x3F\x5E\x8B\x4D\xE4\x39\x09\xE9\xEE\xBE\xB4\x1C",
@@ -143,7 +143,7 @@ player 6ba magic mirrior command (make button style hack)
 698 toggle ghost
 Terraria.Main::DamageVar make ret 0008 for damage hack terraria + 2A6CC210
 
-todo: make button style hack nvm its easy without oneline hack making
+todo: make button style hack nvm its easy without online hack making
 '''
 _thread.start_new_thread(gui, (0,0))
 
