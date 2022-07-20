@@ -16,6 +16,6 @@ Open Terraria and then open TerrariaHax.exe, it'll take a few seconds to open bu
 - Toggle Creative - _Turns on the Journey Mode menu no matter what._
 - Unlock All Creative Items - _Unlocks every item in the Duplication menu._
 - Instant Respawn - _Respawns you instantly on death._
-- Magic Mirror - _When clicked it teleports you to your spawn point._
 
+- Magic Mirror - _When clicked it teleports you to your spawn point._
 - Set Value - _Allows you to change your current Health, Max Health, current Mana and Max Mana._
